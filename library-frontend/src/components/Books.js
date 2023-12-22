@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useBooksByGenre } from "../hooks/useBooksByGenre"
 
 function getGenres(books) {
   const uniqueGenres = books.reduce((acc, book) => {
@@ -19,7 +20,9 @@ const Books = (props) => {
   const books = props.books
 
   const [genres, setGenres] = useState([])
-  const [filteredBooks, setFilteredBooks] = useState(books)
+  const [genre, setGenre] = useState('')
+  const { loading, error, filteredBooks } = useBooksByGenre(genre)
+
 
   useEffect(() => {
     if (books) {
@@ -29,11 +32,6 @@ const Books = (props) => {
 
   if (!props.show) {
     return null
-  }
-
-  const filter = (evt) => {
-    const filtered = books.filter(book => book.genres.includes(evt.target.name))
-    setFilteredBooks(filtered)
   }
 
   return (
@@ -47,7 +45,7 @@ const Books = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {filteredBooks.map((a) => (
+          {filteredBooks && filteredBooks.map((a) => (
             <tr key={a.title}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -58,9 +56,9 @@ const Books = (props) => {
       </table>
       <div>
         {
-          genres.map(genre => <button key={genre} name={genre} onClick={filter}>{genre}</button>)
+          genres.map(genre => <button key={genre} name={genre} onClick={() => setGenre(genre)}>{genre}</button>)
         }
-        <button onClick={() => setFilteredBooks(books)}>all genres</button>
+        <button onClick={() => setGenre('')}>all genres</button>
       </div>
     </div>
   )

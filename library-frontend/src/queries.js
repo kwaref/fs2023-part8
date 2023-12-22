@@ -73,3 +73,17 @@ query {
   }
 }
 `
+
+export const FILTERED_BOOKS = gql`
+query BooksByGenre($genre: String!) {
+  allBooks(genre: $genre) {
+    title
+    author {
+      born
+      name
+    }
+    published
+    genres
+  }
+}
+`
