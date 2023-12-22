@@ -12,8 +12,6 @@ const Authors = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    console.log(name, born)
-
     editAuthor({ variables: { name, setBornTo: born } })
   }
 
@@ -41,16 +39,18 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <h3>Set birth year</h3>
-      <form onSubmit={handleSubmit}>
-        <Select onChange={(e) => setName(e.value)} options={authors.map(author => ({ value: author.name, label: author.name }))} />
-        <div>
-          born: <input type='number' onChange={(e) => setBorn(Number(e.target.value))} />
-        </div>
-        <div>
-          <input type='submit' value={'update author'} />
-        </div>
-      </form>
+      {props.token && <>
+        <h3>Set birth year</h3>
+        <form onSubmit={handleSubmit}>
+          <Select onChange={(e) => setName(e.value)} options={authors.map(author => ({ value: author.name, label: author.name }))} />
+          <div>
+            born: <input type='number' onChange={(e) => setBorn(Number(e.target.value))} />
+          </div>
+          <div>
+            <input type='submit' value={'update author'} />
+          </div>
+        </form>
+      </>}
     </div>
   )
 }
